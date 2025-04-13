@@ -1,18 +1,20 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { User } = require("../../models/User");
+const User = require("../../models/User");
 
 const signUp = async (username, email, password, role) => {
+  console.log(User);
   const existingUser = await User.findOne({ where: { email } });
   if (existingUser) {
     throw new Error("Email is already in use.");
   }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
   const user = await User.create({
     username,
     email,
     password: hashedPassword,
+    salt,
     role: role || "student",
   });
 
@@ -35,8 +37,8 @@ const signIn = async (email, password) => {
   if (!user) {
     throw new Error("Invalid email or password.");
   }
-
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  const hashedPassword = await bcrypt.hash(password, user.salt);
+  const isPasswordValid = await bcrypt.compare(hashedPassword, user.password);
   if (!isPasswordValid) {
     throw new Error("Invalid email or password.");
   }
@@ -45,7 +47,7 @@ const signIn = async (email, password) => {
     { id: user.id, role: user.role },
     process.env.JWT_SECRET,
     {
-      expiresIn: "1h", // Token expires in 1 hour
+      expiresIn: "1h",
     }
   );
 

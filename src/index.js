@@ -22,7 +22,7 @@ const authenticate = require("./middleware/authenticate");
 
 const app = express();
 
-app.use(authenticate);
+// app.use(authenticate);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 app.use(
@@ -34,11 +34,15 @@ app.use(
   }))
 );
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the GraphQL API");
+});
+
 sequelize
   .sync({ alter: true })
   .then(() => {
     console.log("✅ Database synced");
-    const PORT = process.env.PORT || 4000;
+    const PORT = process.env.APP_PORT || 4000;
     app.listen(PORT, () => {
       console.log(`🚀 Server running on http://localhost:${PORT}/graphql`);
     });

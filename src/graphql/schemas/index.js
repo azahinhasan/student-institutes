@@ -3,6 +3,7 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
+  # User schema
   type User {
     id: ID!
     username: String!
@@ -16,10 +17,23 @@ const typeDefs = gql`
     user: User!
   }
 
-  type Query {
-    getUsers: [User!]!
+  # Institute schema
+  type Institute {
+    id: ID!
+    name: String!
+    address: String
+    createdAt: String!
+    updatedAt: String!
   }
 
+  # Queries
+  type Query {
+    getUsers: [User!]!
+    getAllInstitutes: [Institute!]!
+    getInstitute(id: ID!): Institute
+  }
+
+  # Mutations
   type Mutation {
     signUp(
       username: String!
@@ -27,7 +41,9 @@ const typeDefs = gql`
       password: String!
       role: String
     ): AuthPayload!
+
     signIn(email: String!, password: String!): AuthPayload!
+
     updateUser(
       id: ID!
       username: String
@@ -35,7 +51,13 @@ const typeDefs = gql`
       role: String
       isActive: Boolean
     ): User!
+
     deleteUser(id: ID!): String!
+
+    # Institute mutations
+    createInstitute(name: String!, address: String): Institute!
+    updateInstitute(id: ID!, name: String, address: String): Institute!
+    deleteInstitute(id: ID!): String!
   }
 `;
 

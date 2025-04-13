@@ -151,6 +151,60 @@ In the **Body** tab, select `raw` and set the format to `JSON`. Then, enter the 
   }
 }
 
+6. **Institute Queries and Mutations**
+--------------------------------------
+
+### **Get All Institutes**
+```graphql
+query {
+  getAllInstitutes {
+    id
+    name
+    address
+  }
+}
+```
+
+### **Get Institute by ID**
+```graphql
+query {
+  getInstitute(id: 1) {
+    id
+    name
+    address
+  }
+}
+```
+
+### **Create Institute**
+```graphql
+mutation {
+  createInstitute(name: "Institute A", address: "123 Main St") {
+    id
+    name
+    address
+  }
+}
+```
+
+### **Update Institute**
+```graphql
+mutation {
+  updateInstitute(id: 1, name: "Updated Institute", address: "456 New St") {
+    id
+    name
+    address
+  }
+}
+```
+
+### **Delete Institute**
+```graphql
+mutation {
+  deleteInstitute(id: 1)
+}
+```
+
 Using Postman for GraphQL Testing
 =================================
 - **Set up your request** with the URL, method (`POST`), headers, and body (the GraphQL query/mutation).
