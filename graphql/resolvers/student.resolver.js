@@ -19,6 +19,19 @@ const studentResolvers = {
         throw new Error("Student not found.");
       }
     },
+
+    getTopStudentsByResults: async (_, { limit, courseId, year }) => {
+      try {
+        return await studentService.getTopStudentsByResults(
+          limit,
+          courseId,
+          year
+        );
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch top students by results.");
+      }
+    },
   },
 
   Mutation: {

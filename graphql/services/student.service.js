@@ -1,5 +1,5 @@
 const Student = require("../../models/Student");
-const Institute = require("../../models/Institute");
+const sequelize = require("../../config/database");
 
 const getAllStudents = async () => {
   try {
@@ -63,10 +63,61 @@ const deleteStudent = async (id) => {
   }
 };
 
+const getTopStudentsByResults = async (
+  limit = 3,
+  courseId = null,
+  year = null
+) => {
+  try {
+    const [results] = await sequelize.query(
+      `
+      SELECT
+        ranked.student_id,
+        s.name AS student_name,
+        s.email AS student_email,
+        ranked.highest_score,
+        ranked.rank AS rank,
+        c.name AS course_name,
+        ranked.year
+      FROM (
+        SELECT
+          r.student_id,
+          r.course_id,
+          MAX(r.score) AS highest_score,
+          EXTRACT(YEAR FROM r."createdAt") AS year,
+          RANK() OVER (
+            ORDER BY MAX(r.score) DESC
+          ) AS rank
+        FROM "Results" r
+        JOIN "Students" s ON r.student_id = s.id
+        ${courseId ? `JOIN "Courses" c ON r.course_id = c.id` : ""}
+        WHERE 1=1
+        ${courseId ? `AND r.course_id = :courseId` : ""}
+        ${year ? `AND EXTRACT(YEAR FROM r."createdAt") = :year` : ""}
+        GROUP BY r.student_id, r.course_id, EXTRACT(YEAR FROM r."createdAt")
+      ) AS ranked
+      JOIN "Students" s ON ranked.student_id = s.id
+      JOIN "Courses" c ON ranked.course_id = c.id
+      ORDER BY ranked.rank
+      LIMIT ${limit};
+      `,
+      {
+        replacements: { limit, courseId, year },
+      }
+    );
+
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch top students by results.");
+  }
+};
+
 module.exports = {
   getAllStudents,
   getStudentById,
   createStudent,
   updateStudent,
   deleteStudent,
+  getTopStudentsByResults,
 };

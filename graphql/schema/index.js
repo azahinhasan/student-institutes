@@ -34,9 +34,20 @@ const typeDefs = gql`
     institute_id: Int!
   }
 
+  type TopStudent {
+    student_id: Int
+    student_name: String
+    student_email: String
+    rank: Int
+    highest_score: String
+    course_name: String!
+    year: Int!
+  }
+
   type TopCourse {
     year: Int
     course_name: String
+    rank: Int
     course_code: String
     student_count: Int
   }
@@ -80,6 +91,7 @@ const typeDefs = gql`
     getResults: [Result]
     getResult(id: ID!): Result
     getResultsPerInstitute: [Institute!]!
+    getTopStudentsByResults(limit: Int, courseId: Int, year: Int): [TopStudent]
 
     # Student queries
     getAllStudents: [Student]

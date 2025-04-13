@@ -25,7 +25,7 @@ module.exports = {
       results.push({
         student_id: student.id,
         course_id: course.id,
-        score: faker.number.int({ min: 50, max: 100 }),
+        score: faker.number.int({ min: 20, max: 100 }),
         grade: faker.helpers.arrayElement(["A", "B", "C", "D", "F"]),
         createdAt: new Date(),
         updatedAt: new Date(),
