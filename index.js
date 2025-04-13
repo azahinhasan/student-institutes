@@ -22,15 +22,16 @@ const authenticate = require("./middleware/authenticate");
 
 const app = express();
 
-// app.use(authenticate);
+app.use(authenticate);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
+
 app.use(
   "/graphql",
-  graphqlHTTP((req) => ({
+  graphqlHTTP((req, res) => ({
     schema,
     graphiql: true,
-    context: { user: req.user },
+    context: { user: req.user, res },
   }))
 );
 

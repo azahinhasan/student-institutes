@@ -17,157 +17,46 @@ This guide demonstrates how to interact with the GraphQL API using Postman for u
    - `Content-Type`: `application/json`
    - `Authorization`: `Bearer <your_token_here>` (For requests that require authentication)
 
-5. **Sign-Up Mutation**
+## Sign-Up Mutation
 
----
-
-**Request**:
-
-- **Method**: `POST`
-- **URL**: `http://localhost:4000/graphql`
-- **Headers**:
-  - `Content-Type`: `application/json`
-
-**Body (GraphQL Mutation)**:
-In the **Body** tab, select `raw` and set the format to `JSON`. Then, enter the following:
-
-{
-"query": "mutation SignUp($username: String!, $email: String!, $password: String!, $role: String) { signUp(username: $username, email: $email, password: $password, role: $role) { token user { id username email } } }",
-"variables": {
-"username": "john_doe",
-"email": "john@example.com",
-"password": "password123",
-"role": "student"
+```graphql
+mutation {
+  signUp(
+    username: "zahin_hasan"
+    email: "zahin@example.com"
+    password: "password123"
+    role: "admin"
+  ) {
+    token
+    user {
+      id
+      username
+      email
+    }
+  }
 }
+```
+
+## Sign-In Mutation
+
+```graphql
+mutation {
+  signIn(
+    email: "zahin@example.com"
+    password: "password123"
+  ) {
+    token
+    user {
+      id
+      username
+      email
+    }
+  }
 }
+```
 
-**Example Response**:
+## Institute Queries and Mutations
 
-{
-"data": {
-"signUp": {
-"token": "your_jwt_token_here",
-"user": {
-"id": "1",
-"username": "john_doe",
-"email": "john@example.com"
-}
-}
-}
-}
-
-3. **Sign-In Mutation**
-
----
-
-**Request**:
-
-- **Method**: `POST`
-- **URL**: `http://localhost:4000/graphql`
-- **Headers**:
-  - `Content-Type`: `application/json`
-
-**Body (GraphQL Mutation)**:
-In the **Body** tab, select `raw` and set the format to `JSON`. Then, enter the following:
-
-{
-"query": "mutation SignIn($email: String!, $password: String!) { signIn(email: $email, password: $password) { token user { id username email } } }",
-"variables": {
-"email": "john@example.com",
-"password": "password123"
-}
-}
-
-**Example Response**:
-
-{
-"data": {
-"signIn": {
-"token": "your_jwt_token_here",
-"user": {
-"id": "1",
-"username": "john_doe",
-"email": "john@example.com"
-}
-}
-}
-}
-
-4. **Update User Mutation**
-
----
-
-To update a user's information, you will need to authenticate the user first by providing the JWT token from the Sign-In response.
-
-**Request**:
-
-- **Method**: `POST`
-- **URL**: `http://localhost:4000/graphql`
-- **Headers**:
-  - `Content-Type`: `application/json`
-  - `Authorization`: `Bearer <your_token_here>` _(replace `<your_token_here>` with the JWT token you received from Sign-In)_
-
-**Body (GraphQL Mutation)**:
-In the **Body** tab, select `raw` and set the format to `JSON`. Then, enter the following:
-
-{
-"query": "mutation UpdateUser($id: ID!, $username: String, $email: String, $role: String, $isActive: Boolean) { updateUser(id: $id, username: $username, email: $email, role: $role, isActive: $isActive) { id username email } }",
-"variables": {
-"id": "1", // User ID to update
-"username": "john_doe_updated",
-"email": "john_updated@example.com",
-"role": "student",
-"isActive": true
-}
-}
-
-**Example Response**:
-
-{
-"data": {
-"updateUser": {
-"id": "1",
-"username": "john_doe_updated",
-"email": "john_updated@example.com"
-}
-}
-}
-
-5. **Delete User Mutation**
-
----
-
-To delete a user, you will need to authenticate the user first by providing the JWT token from the Sign-In response.
-
-**Request**:
-
-- **Method**: `POST`
-- **URL**: `http://localhost:4000/graphql`
-- **Headers**:
-  - `Content-Type`: `application/json`
-  - `Authorization`: `Bearer <your_token_here>` _(replace `<your_token_here>` with the JWT token you received from Sign-In)_
-
-**Body (GraphQL Mutation)**:
-In the **Body** tab, select `raw` and set the format to `JSON`. Then, enter the following:
-
-{
-"query": "mutation DeleteUser($id: ID!) { deleteUser(id: $id) }",
-"variables": {
-"id": "1" // User ID to delete
-}
-}
-
-**Example Response**:
-
-{
-"data": {
-"deleteUser": "User deleted successfully."
-}
-}
-
-6. **Institute Queries and Mutations**
-
----
 
 ### **Get All Institutes**
 
@@ -225,9 +114,7 @@ mutation {
 }
 ```
 
-6. **Student Queries and Mutations**
-
----
+## Student Queries and Mutations
 
 ### **Get All Students**
 
@@ -290,8 +177,8 @@ query {
 ```graphql
 mutation {
   createStudent(
-    name: "John Doe"
-    email: "john.doe@example.com"
+    name: "Zahin Hasan"
+    email: "zahin.hasan@example.com"
     dob: "2000-01-01"
     institute_id: 1
   ) {
@@ -310,8 +197,8 @@ mutation {
 mutation {
   updateStudent(
     id: 1
-    name: "John Doe Updated"
-    email: "john.doe.updated@example.com"
+    name: "Zahin Hasan Updated"
+    email: "zahin.hasan.updated@example.com"
     dob: "2000-01-01"
     institute_id: 1
   ) {
@@ -332,9 +219,7 @@ mutation {
 }
 ```
 
-7. **Course Queries and Mutations**
-
----
+## Course Queries and Mutations
 
 ### **Get All Courses**
 
@@ -428,11 +313,7 @@ mutation {
 }
 ```
 
----
-
-8. **Result Queries and Mutations**
-
----
+## Result Queries and Mutations
 
 ### **Get All Results**
 

@@ -16,8 +16,19 @@ const resolvers = {
     signUp: async (_, { username, email, password, role }) => {
       return await signUp(username, email, password, role);
     },
-    signIn: async (_, { email, password }) => {
-      return await signIn(email, password);
+    signIn: async (_, { email, password }, { res }) => {
+      const { token, user } = await signIn(email, password);
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 3600000, // Cookie expiration time (1 hour)
+      });
+
+      return {
+        token,
+        user,
+      };
     },
     updateUser: async (_, { id, username, email, role, isActive }) => {
       return await updateUser(id, username, email, role, isActive);
