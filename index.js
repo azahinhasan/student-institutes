@@ -5,24 +5,24 @@ const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 const jwt = require("jsonwebtoken");
-
-// Sequelize setup
 const sequelize = require("./config/database");
-
-// Models
-const Institute = require("./models/Institute");
-const Student = require("./models/Student");
-const Course = require("./models/Course");
-const Result = require("./models/Result");
-
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
-
 const authenticate = require("./middleware/authenticate");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
-app.use(authenticate);
+app.use(cookieParser());
+app.use(express.json());
+
+app.use((req, res, next) => {
+  if (req.body?.query?.includes("signIn")) {
+    return next();
+  }
+
+  authenticate(req, res, next);
+});
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 

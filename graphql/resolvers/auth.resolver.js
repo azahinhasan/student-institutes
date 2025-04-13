@@ -22,7 +22,7 @@ const resolvers = {
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        maxAge: 3600000, // Cookie expiration time (1 hour)
+        maxAge: 3600000, // (1 hour)
       });
 
       return {
