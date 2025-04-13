@@ -24,9 +24,10 @@ sequelize
 
 module.exports = sequelize;
 
-// PORT=4000
-// DB_NAME=your_db
-// DB_USER=your_user
-// DB_PASS=your_pass
+// DB_PORT=5432
+// DB_NAME=postgres_new2
+// DB_USER=root
+// DB_PASS=123
 // DB_HOST=localhost
 // JWT_SECRET=supersecretkey
+// APP_PORT=5000

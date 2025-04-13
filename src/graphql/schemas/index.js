@@ -59,6 +59,53 @@ const typeDefs = gql`
     updateInstitute(id: ID!, name: String, address: String): Institute!
     deleteInstitute(id: ID!): String!
   }
+
+  ###Student###
+  type Student {
+    id: ID!
+    name: String!
+    email: String!
+    dob: String
+    institute_id: ID!
+    createdAt: String
+    updatedAt: String
+  }
+
+  input CreateStudentInput {
+    name: String!
+    email: String!
+    dob: String
+    institute_id: ID!
+  }
+
+  input UpdateStudentInput {
+    name: String
+    email: String
+    dob: String
+    institute_id: ID
+  }
+
+  type Query {
+    getAllStudents: [Student]
+    getStudent(id: ID!): Student
+  }
+
+  type Mutation {
+    createStudent(
+      name: String!
+      email: String!
+      dob: String
+      institute_id: ID!
+    ): Student
+    updateStudent(
+      id: ID!
+      name: String
+      email: String
+      dob: String
+      institute_id: ID
+    ): Student
+    deleteStudent(id: ID!): String
+  }
 `;
 
 module.exports = typeDefs;

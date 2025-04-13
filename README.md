@@ -205,6 +205,75 @@ mutation {
 }
 ```
 
+
+6. **Student Queries and Mutations**
+--------------------------------------
+
+### **Get All Students**
+```graphql
+query {
+  getAllStudents {
+    id
+    name
+    email
+    dob
+    institute_id
+    createdAt
+    updatedAt
+  }
+}
+```
+### **Get Student by ID**
+```graphql
+query {
+  getStudent(id: 1) {
+    id
+    name
+    email
+    dob
+    institute_id
+    createdAt
+    updatedAt
+  }
+}
+```
+
+### **Create Student**
+```graphql
+mutation {
+  createStudent(name: "John Doe", email: "john.doe@example.com", dob: "2000-01-01", institute_id: 1) {
+    id
+    name
+    email
+    dob
+    institute_id
+  }
+}
+```
+
+### **Update Student**
+```graphql
+mutation {
+  updateStudent(id: 1,  name: "John Doe Updated", email: "john.doe.updated@example.com", dob: "2000-01-01", institute_id: 1 ) {
+    id
+    name
+    email
+    dob
+    institute_id
+  }
+}
+```
+
+### **Delete Student**
+```graphql
+mutation {
+  deleteStudent(id: 1)
+}
+```
+
+
+
+
 Using Postman for GraphQL Testing
 =================================
 - **Set up your request** with the URL, method (`POST`), headers, and body (the GraphQL query/mutation).
