@@ -10,28 +10,22 @@ module.exports = {
     );
 
     let totalStudents = 0;
-    for (const institute of institutes) {
-      if (totalStudents >= 30) break;
+    while (totalStudents < 3000) {
+      const email = faker.internet.email().toLowerCase();
+      if (usedEmails.has(email)) continue;
 
-      let i = 0;
-      while (i < 10 && totalStudents < 30) {
-        const email = faker.internet.email().toLowerCase();
-        if (usedEmails.has(email)) continue;
+      usedEmails.add(email);
 
-        usedEmails.add(email);
-
-        students.push({
-          name: faker.person.fullName(),
-          email: email,
-          dob: faker.date.past({ years: 20 }).toISOString().split("T")[0],
-          institute_id: institute.id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-
-        i++;
-        totalStudents++;
-      }
+      students.push({
+        name: faker.person.fullName(),
+        email: email,
+        dob: faker.date.past({ years: 20 }).toISOString().split("T")[0],
+        institute_id:
+          institutes[Math.floor(Math.random() * (institutes.length - 1))].id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      totalStudents++;
     }
 
     await queryInterface.bulkInsert("Students", students);

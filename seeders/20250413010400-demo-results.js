@@ -11,23 +11,25 @@ module.exports = {
       'SELECT id FROM "Courses"'
     );
 
-    let counter = 0;
-    for (const student of students) {
-      for (const course of courses) {
-        if (counter >= 100000) break;
+    const uniquePairs = new Set();
 
-        results.push({
-          student_id: student.id,
-          course_id: course.id,
-          score: faker.number.int({ min: 50, max: 100 }),
-          grade: faker.helpers.arrayElement(["A", "B", "C", "D", "F"]),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
+    while (results.length < 100000) {
+      const student = students[Math.floor(Math.random() * students.length)];
+      const course = courses[Math.floor(Math.random() * courses.length)];
 
-        counter++;
-      }
-      if (counter >= 100000) break;
+      const key = `${student.id}-${course.id}`;
+      if (uniquePairs.has(key)) continue; // skip if already exists
+
+      uniquePairs.add(key);
+
+      results.push({
+        student_id: student.id,
+        course_id: course.id,
+        score: faker.number.int({ min: 50, max: 100 }),
+        grade: faker.helpers.arrayElement(["A", "B", "C", "D", "F"]),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
     }
 
     await queryInterface.bulkInsert("Results", results);
