@@ -15,7 +15,7 @@ const Student = require("./models/Student");
 const Course = require("./models/Course");
 const Result = require("./models/Result");
 
-const typeDefs = require("./graphql/schemas");
+const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
 
 const authenticate = require("./middleware/authenticate");

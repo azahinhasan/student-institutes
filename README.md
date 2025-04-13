@@ -238,7 +238,7 @@ query {
 }
 ```
 
-### **Get Results Per Institute**
+### **Get Results Per Institute of all students**
 ```graphql
 query {
   getResultsPerInstitute {

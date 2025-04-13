@@ -22,7 +22,7 @@ const typeDefs = gql`
     address: String
     createdAt: String!
     updatedAt: String!
-    students: [Student]
+    students: [Student!]!
   }
 
   # Course schema

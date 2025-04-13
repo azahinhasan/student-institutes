@@ -31,7 +31,7 @@ const Result = sequelize.define(
 Result.belongsTo(Student, { foreignKey: "student_id", onDelete: "CASCADE" });
 Result.belongsTo(Course, { foreignKey: "course_id", onDelete: "CASCADE" });
 
-Student.hasMany(Result, { foreignKey: "student_id" });
+Student.hasMany(Result, { foreignKey: "student_id", as: "results" });
 Course.hasMany(Result, { foreignKey: "course_id" });
 
 module.exports = Result;

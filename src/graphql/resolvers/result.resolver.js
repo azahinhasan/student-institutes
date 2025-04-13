@@ -1,6 +1,4 @@
 const resultService = require("../services/result.service");
-const Student = require("../../models/Student");
-const Result = require("../../models/Result");
 
 const resultResolvers = {
   Query: {
@@ -24,27 +22,13 @@ const resultResolvers = {
 
     getResultsPerInstitute: async () => {
       try {
-        const a = await resultService.getResultsPerInstitute();
-        // console.log("Fetching results per institute...", a);
-        return a;
+        return await resultService.getResultsPerInstitute();
       } catch (error) {
         console.error(error);
         throw new Error("Failed to fetch results per institute.");
       }
     },
   },
-
-  // Institute: {
-  //   students: async (institute) => {
-  //     return await Student.findAll({ where: { institute_id: institute.id } });
-  //   },
-  // },
-
-  // Student: {
-  //   results: async (student) => {
-  //     return await Result.findAll({ where: { student_id: student.id } });
-  //   },
-  // },
 
   Mutation: {
     createResult: async (_, { score, grade, student_id, course_id }) => {

@@ -27,6 +27,6 @@ Student.belongsTo(Institute, {
   foreignKey: "institute_id",
   onDelete: "CASCADE",
 });
-Institute.hasMany(Student, { foreignKey: "institute_id" });
+Institute.hasMany(Student, { foreignKey: "institute_id", as: "students" });
 
 module.exports = Student;

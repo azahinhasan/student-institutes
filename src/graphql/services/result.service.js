@@ -74,9 +74,11 @@ const getResultsPerInstitute = async () => {
     const results = await Institute.findAll({
       include: {
         model: Student,
+        as: "students",
         include: [
           {
             model: Result,
+            as: "results",
           },
         ],
       },
@@ -85,7 +87,6 @@ const getResultsPerInstitute = async () => {
     if (!results || results.length === 0) {
       return [];
     }
-    console.log("Results per institute:", JSON.stringify(results, null, 2));
     return results;
   } catch (error) {
     console.error(error);
