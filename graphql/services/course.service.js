@@ -1,4 +1,5 @@
 const Course = require("../../models/Course");
+const sequelize = require("../../config/database");
 
 const getAllCourses = async () => {
   try {
@@ -60,10 +61,45 @@ const deleteCourse = async (id) => {
   }
 };
 
+const getTopCoursesPerYear = async (limit = 3) => {
+  try {
+    const [results] = await sequelize.query(
+      `
+      SELECT *
+      FROM (
+        SELECT
+          EXTRACT(YEAR FROM r."createdAt") AS year,
+          c.name AS course_name,
+          c.code AS course_code,
+          COUNT(r.id) AS student_count,
+          RANK() OVER (
+            PARTITION BY EXTRACT(YEAR FROM r."createdAt")
+            ORDER BY COUNT(r.id) DESC
+          ) AS rank
+        FROM "Results" r
+        JOIN "Courses" c ON r.course_id = c.id
+        GROUP BY year, c.id
+      ) AS ranked
+      WHERE rank <= :limit
+      ORDER BY year, rank;
+    `,
+      {
+        replacements: { limit },
+      }
+    );
+
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch top courses per year.");
+  }
+};
+
 module.exports = {
   getAllCourses,
   getCourseById,
   createCourse,
   updateCourse,
   deleteCourse,
+  getTopCoursesPerYear,
 };

@@ -19,6 +19,14 @@ const courseResolvers = {
         throw new Error("Course not found.");
       }
     },
+    getTopCoursesPerYear: async (_, { limit }) => {
+      try {
+        return await courseService.getTopCoursesPerYear(limit || 3);
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch top courses per year.");
+      }
+    },
   },
 
   Mutation: {

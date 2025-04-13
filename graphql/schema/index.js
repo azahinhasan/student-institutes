@@ -34,6 +34,13 @@ const typeDefs = gql`
     institute_id: Int!
   }
 
+  type TopCourse {
+    year: Int
+    course_name: String
+    course_code: String
+    student_count: Int
+  }
+
   # Result schema
   type Result {
     id: ID!
@@ -67,6 +74,7 @@ const typeDefs = gql`
     # Course queries
     getCourses: [Course]
     getCourse(id: ID!): Course
+    getTopCoursesPerYear(limit: Int): [TopCourse]
 
     # Result queries
     getResults: [Result]

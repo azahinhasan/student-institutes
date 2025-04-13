@@ -328,6 +328,17 @@ query {
   }
 }
 ```
+### **Top Courses Taken by uUsers Per Year**
+```graphql
+query {
+  getTopCoursesPerYear(limit: 5) {
+    year
+    course_name
+    course_code
+    student_count
+  }
+}
+```
 
 ### **Create Course**
 ```graphql
