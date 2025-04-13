@@ -238,6 +238,29 @@ query {
 }
 ```
 
+### **Get Results Per Institute**
+```graphql
+query {
+  getResultsPerInstitute {
+    id
+    name
+    address
+    students {
+      id
+      name
+      email
+      dob
+      results {
+        id
+        score
+        grade
+        course_id
+      }
+    }
+  }
+}
+```
+
 ### **Create Student**
 ```graphql
 mutation {
@@ -272,6 +295,140 @@ mutation {
 ```
 
 
+
+7. **Course Queries and Mutations**
+--------------------------------------
+
+### **Get All Courses**
+```graphql
+query {
+  getCourses {
+    id
+    name
+    code
+    credits
+    institute_id
+    createdAt
+    updatedAt
+  }
+}
+```
+
+### **Get Course by ID**
+```graphql
+query {
+  getCourse(id: 1) {
+    id
+    name
+    code
+    credits
+    institute_id
+    createdAt
+    updatedAt
+  }
+}
+```
+
+### **Create Course**
+```graphql
+mutation {
+  createCourse(name: "Introduction to Computer Science", code: "CS101", credits: 3, institute_id: 1) {
+    id
+    name
+    code
+    credits
+    institute_id
+  }
+}
+```
+
+### **Update Course**
+```graphql
+mutation {
+  updateCourse(id: 1, name: "Advanced Computer Science", code: "CS102", credits: 4, institute_id: 1) {
+    id
+    name
+    code
+    credits
+    institute_id
+  }
+}
+```
+
+### **Delete Course**
+```graphql
+mutation {
+  deleteCourse(id: 1)
+}
+```
+
+---
+
+8. **Result Queries and Mutations**
+--------------------------------------
+
+### **Get All Results**
+```graphql
+query {
+  getResults {
+    id
+    score
+    grade
+    student_id
+    course_id
+    createdAt
+    updatedAt
+  }
+}
+```
+
+### **Get Result by ID**
+```graphql
+query {
+  getResult(id: 1) {
+    id
+    score
+    grade
+    student_id
+    course_id
+    createdAt
+    updatedAt
+  }
+}
+```
+
+### **Create Result**
+```graphql
+mutation {
+  createResult(score: 95.5, grade: "A", student_id: 1, course_id: 1) {
+    id
+    score
+    grade
+    student_id
+    course_id
+  }
+}
+```
+
+### **Update Result**
+```graphql
+mutation {
+  updateResult(id: 1, score: 88.0, grade: "B") {
+    id
+    score
+    grade
+    student_id
+    course_id
+  }
+}
+```
+
+### **Delete Result**
+```graphql
+mutation {
+  deleteResult(id: 1)
+}
+```
 
 
 Using Postman for GraphQL Testing
