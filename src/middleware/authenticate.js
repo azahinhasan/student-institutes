@@ -1,15 +1,23 @@
+// src/middleware/authenticate.js
+
 const jwt = require("jsonwebtoken");
 
-module.exports = function authenticate(req, res, next) {
+const authenticate = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return next();
 
-  try {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = user;
-  } catch (err) {
-    console.warn("JWT invalid or expired");
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Access denied. No token provided." });
   }
 
-  next();
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(400).json({ message: "Invalid token." });
+  }
 };
+
+module.exports = authenticate;

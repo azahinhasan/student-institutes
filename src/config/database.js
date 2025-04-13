@@ -12,3 +12,10 @@ const sequelize = new Sequelize(
 );
 
 module.exports = sequelize;
+
+// PORT=4000
+// DB_NAME=your_db
+// DB_USER=your_user
+// DB_PASS=your_pass
+// DB_HOST=localhost
+// JWT_SECRET=supersecretkey

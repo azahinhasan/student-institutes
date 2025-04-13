@@ -1,7 +1,10 @@
+// src/index.js
+
 require("dotenv").config();
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
+const jwt = require("jsonwebtoken");
 
 // Sequelize setup
 const sequelize = require("./config/database");
@@ -19,17 +22,16 @@ const authenticate = require("./middleware/authenticate");
 
 const app = express();
 
-app.use(express.json());
-
 app.use(authenticate);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 app.use(
   "/graphql",
-  graphqlHTTP({
+  graphqlHTTP((req) => ({
     schema,
     graphiql: true,
-  })
+    context: { user: req.user },
+  }))
 );
 
 sequelize
