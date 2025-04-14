@@ -13,7 +13,8 @@
     "seed": "sequelize db:seed:all",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "sync-db": "node sync-db.js"
   },
   "keywords": [],
   "author": "",

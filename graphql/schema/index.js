@@ -4,7 +4,7 @@ const typeDefs = gql`
   # User schema
   type User {
     id: ID!
-    username: String!
+    name: String!
     email: String!
     role: String!
     isActive: Boolean!
@@ -102,7 +102,7 @@ const typeDefs = gql`
   type Mutation {
     # User mutations
     signUp(
-      username: String!
+      name: String!
       email: String!
       password: String!
       role: String
@@ -112,7 +112,7 @@ const typeDefs = gql`
 
     updateUser(
       id: ID!
-      username: String
+      name: String
       email: String
       role: String
       isActive: Boolean

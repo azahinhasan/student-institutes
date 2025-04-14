@@ -2,8 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 
-const signUp = async (username, email, password, role) => {
-  console.log(User);
+const signUp = async (name, email, password, role) => {
   const existingUser = await User.findOne({ where: { email } });
   if (existingUser) {
     throw new Error("Email is already in use.");
@@ -11,18 +10,18 @@ const signUp = async (username, email, password, role) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   const user = await User.create({
-    username,
+    name,
     email,
     password: hashedPassword,
     salt,
-    role: role || "student",
+    role: role,
   });
 
   const token = jwt.sign(
     { id: user.id, role: user.role },
     process.env.JWT_SECRET,
     {
-      expiresIn: "1h", // Token expires in 1 hour
+      expiresIn: "7d",
     }
   );
 
@@ -37,9 +36,12 @@ const signIn = async (email, password) => {
   if (!user) {
     throw new Error("Invalid email or password.");
   }
+  if (!user.isActive) {
+    throw new Error("Account is inactive.");
+  }
   const hashedPassword = await bcrypt.hash(password, user.salt);
-  const isPasswordValid = await bcrypt.compare(hashedPassword, user.password);
-  if (!isPasswordValid) {
+
+  if (hashedPassword != user.password) {
     throw new Error("Invalid email or password.");
   }
 
@@ -47,7 +49,7 @@ const signIn = async (email, password) => {
     { id: user.id, role: user.role },
     process.env.JWT_SECRET,
     {
-      expiresIn: "1h",
+      expiresIn: "7d",
     }
   );
 
@@ -57,13 +59,13 @@ const signIn = async (email, password) => {
   };
 };
 
-const updateUser = async (id, username, email, role, isActive) => {
+const updateUser = async (id, name, email, role, isActive) => {
   const user = await User.findByPk(id);
   if (!user) {
     throw new Error("User not found.");
   }
 
-  user.username = username || user.username;
+  user.name = name || user.name;
   user.email = email || user.email;
   user.role = role || user.role;
   user.isActive = isActive !== undefined ? isActive : user.isActive;

@@ -22,7 +22,7 @@ This guide demonstrates how to interact with the GraphQL API using Postman for u
 ```graphql
 mutation {
   signUp(
-    username: "zahin_hasan"
+    name: "zahin_hasan"
     email: "zahin@example.com"
     password: "password123"
     role: "admin"
@@ -30,7 +30,7 @@ mutation {
     token
     user {
       id
-      username
+      name
       email
     }
   }
@@ -48,7 +48,7 @@ mutation {
     token
     user {
       id
-      username
+      name
       email
     }
   }

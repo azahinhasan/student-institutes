@@ -1,42 +1,64 @@
-const {
-  signUp,
-  signIn,
-  updateUser,
-  deleteUser,
-  getUsers,
-} = require("../services/auth.service");
+const authService = require("../services/auth.service");
 
-const resolvers = {
+const authResolvers = {
   Query: {
     getUsers: async () => {
-      return await getUsers();
+      try {
+        return await authService.getUsers();
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to fetch users.");
+      }
     },
   },
+
   Mutation: {
-    signUp: async (_, { username, email, password, role }) => {
-      return await signUp(username, email, password, role);
+    signUp: async (_, { name, email, password, role }) => {
+      try {
+        return await authService.signUp(name, email, password, role);
+      } catch (error) {
+        console.error(error);
+        throw new Error(
+          error.toString().split(":")[1] || "Failed to sign up user."
+        );
+      }
     },
+
     signIn: async (_, { email, password }, { res }) => {
-      const { token, user } = await signIn(email, password);
+      try {
+        const { token, user } = await authService.signIn(email, password);
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 3600000, // (1 hour)
-      });
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 3600000, // 1 hour
+        });
 
-      return {
-        token,
-        user,
-      };
+        return { token, user };
+      } catch (error) {
+        console.error(error);
+        throw new Error(error.toString().split(":")[1] || "Failed to sign in.");
+      }
     },
-    updateUser: async (_, { id, username, email, role, isActive }) => {
-      return await updateUser(id, username, email, role, isActive);
+
+    updateUser: async (_, { id, name, email, role, isActive }) => {
+      try {
+        return await authService.updateUser(id, name, email, role, isActive);
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to update user.");
+      }
     },
+
     deleteUser: async (_, { id }) => {
-      return await deleteUser(id);
+      try {
+        return await authService.deleteUser(id);
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to delete user.");
+      }
     },
   },
 };
 
-module.exports = resolvers;
+module.exports = authResolvers;

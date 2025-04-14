@@ -5,9 +5,8 @@ const bcrypt = require("bcryptjs");
 const User = sequelize.define(
   "User",
   {
-    username: {
+    name: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
     },
     email: {
@@ -34,6 +33,14 @@ const User = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
+  },
+  {
+    timestamps: true,
+    indexes: [
+      {
+        fields: ["email"],
+      },
+    ],
   },
   {
     hooks: {
