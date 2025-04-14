@@ -2,9 +2,9 @@ const studentService = require("../services/student.service");
 
 const studentResolvers = {
   Query: {
-    getAllStudents: async () => {
+    getAllStudents: async (args) => {
       try {
-        return await studentService.getAllStudents();
+        return await studentService.getAllStudents(args);
       } catch (error) {
         console.error(error);
         throw new Error("Failed to fetch students.");
@@ -20,10 +20,11 @@ const studentResolvers = {
       }
     },
 
-    getTopStudentsByResults: async (_, { limit, courseId, year }) => {
+    getTopStudentsByResults: async (_, { limit, offset, courseId, year }) => {
       try {
         return await studentService.getTopStudentsByResults(
           limit,
+          offset,
           courseId,
           year
         );

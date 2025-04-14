@@ -25,6 +25,12 @@ const typeDefs = gql`
     students: [Student!]!
   }
 
+  # Institute paginated results schema
+  type InstituteResultsPagination {
+    institutes: [Institute!]!
+    totalCount: Int!
+  }
+
   # Course schema
   type Course {
     id: ID!
@@ -34,6 +40,12 @@ const typeDefs = gql`
     institute_id: Int!
   }
 
+  type CoursePagination {
+    courses: [Course!]!
+    totalCount: Int!
+  }
+
+  # TopStudent schema
   type TopStudent {
     student_id: Int
     student_name: String
@@ -44,6 +56,13 @@ const typeDefs = gql`
     year: Int!
   }
 
+  # TopStudent pagination
+  type TopStudentPagination {
+    results: [TopStudent!]!
+    totalCount: Int!
+  }
+
+  # TopCourse schema
   type TopCourse {
     year: Int
     course_name: String
@@ -63,6 +82,12 @@ const typeDefs = gql`
     updatedAt: String!
   }
 
+  # Result Pagination schema
+  type ResultPagination {
+    results: [Result!]!
+    totalCount: Int!
+  }
+
   # Student schema
   type Student {
     id: ID!
@@ -75,6 +100,11 @@ const typeDefs = gql`
     results: [Result!]!
   }
 
+  type StudentPagination {
+    students: [Student!]!
+    totalCount: Int!
+  }
+
   # Queries
   type Query {
     # User queries
@@ -83,18 +113,25 @@ const typeDefs = gql`
     getInstitute(id: ID!): Institute
 
     # Course queries
-    getCourses: [Course]
+    getCourses(limit: Int, offset: Int): CoursePagination!
     getCourse(id: ID!): Course
     getTopCoursesPerYear(limit: Int): [TopCourse]
 
     # Result queries
-    getResults: [Result]
+    getResults(limit: Int, offset: Int): ResultPagination!
     getResult(id: ID!): Result
-    getResultsPerInstitute: [Institute!]!
-    getTopStudentsByResults(limit: Int, courseId: Int, year: Int): [TopStudent]
+    getResultsPerInstitute(limit: Int, offset: Int): InstituteResultsPagination!
+
+    # Updated TopStudents query with pagination
+    getTopStudentsByResults(
+      limit: Int
+      offset: Int
+      courseId: Int
+      year: Int
+    ): TopStudentPagination!
 
     # Student queries
-    getAllStudents: [Student]
+    getAllStudents(limit: Int, offset: Int): StudentPagination!
     getStudent(id: ID!): Student
   }
 

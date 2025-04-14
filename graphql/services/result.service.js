@@ -1,13 +1,19 @@
 const Result = require("../../models/Result");
 const Student = require("../../models/Student");
 const Institute = require("../../models/Institute");
-const Course = require("../../models/Course");
 
-const getAllResults = async () => {
+const getAllResults = async ({ limit = 10, offset = 0 } = {}) => {
   try {
-    return await Result.findAll({
+    const results = await Result.findAll({
+      where: { voided: false },
+      limit,
+      offset,
+    });
+    const totalCount = await Result.count({
       where: { voided: false },
     });
+
+    return { results, totalCount };
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch results.");
@@ -81,9 +87,9 @@ const deleteResult = async (id) => {
   }
 };
 
-const getResultsPerInstitute = async () => {
+const getResultsPerInstitute = async ({ limit = 10, offset = 0 }) => {
   try {
-    const results = await Institute.findAll({
+    const institutes = await Institute.findAll({
       where: { voided: false },
       include: {
         model: Student,
@@ -96,20 +102,21 @@ const getResultsPerInstitute = async () => {
             as: "results",
             where: { voided: false },
             required: false,
-            include: [
-              {
-                model: Course,
-                as: "course",
-                where: { voided: false },
-                required: false,
-              },
-            ],
           },
         ],
       },
+      limit,
+      offset,
     });
 
-    return results;
+    const totalInstitutes = await Institute.count({
+      where: { voided: false },
+    });
+
+    return {
+      institutes,
+      totalCount: totalInstitutes,
+    };
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch results per institute.");

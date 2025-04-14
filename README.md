@@ -1,23 +1,9 @@
-Project Documentation
+# Project Documentation
 
-# Client-Side GraphQL API Testing with Postman
 
-This guide demonstrates how to interact with the GraphQL API using Postman for user management functionalities like **Sign-Up**, **Sign-In**, **Update User**, and **Delete User**.
+## Auth Mutations
 
-1. **Set Up Postman for GraphQL**
-
----
-
-1. Open **Postman** and create a new request.
-2. Set the **request type** to `POST`.
-3. In the **URL** field, enter your GraphQL server endpoint:
-   http://localhost:4000/graphql
-4. In the **Headers** tab, set the following headers:
-
-   - `Content-Type`: `application/json`
-   - `Authorization`: `Bearer <your_token_here>` (For requests that require authentication)
-
-## Sign-Up Mutation
+### **Sign-Up Mutation**
 
 ```graphql
 mutation {
@@ -37,14 +23,11 @@ mutation {
 }
 ```
 
-## Sign-In Mutation
+### **Sign-In Mutation**
 
 ```graphql
 mutation {
-  signIn(
-    email: "zahin@example.com"
-    password: "password123"
-  ) {
+  signIn(email: "zahin@example.com", password: "password123") {
     token
     user {
       id
@@ -56,7 +39,6 @@ mutation {
 ```
 
 ## Institute Queries and Mutations
-
 
 ### **Get All Institutes**
 
@@ -120,14 +102,13 @@ mutation {
 
 ```graphql
 query {
-  getAllStudents {
-    id
-    name
-    email
-    dob
-    institute_id
-    createdAt
-    updatedAt
+  getAllStudents(limit: 5, offset: 1) {
+    students {
+      id
+      name
+      email
+    }
+    totalCount
   }
 }
 ```
@@ -152,20 +133,23 @@ query {
 
 ```graphql
 query {
-  getResultsPerInstitute {
-    id
-    name
-    address
-    students {
+  getResultsPerInstitute(limit: 1, offset: 0) {
+    totalCount
+    institutes {
       id
       name
-      email
-      dob
-      results {
+      address
+      students {
         id
-        score
-        grade
-        course_id
+        name
+        email
+        dob
+        results {
+          id
+          score
+          grade
+          course_id
+        }
       }
     }
   }
@@ -225,14 +209,15 @@ mutation {
 
 ```graphql
 query {
-  getCourses {
-    id
-    name
-    code
-    credits
-    institute_id
-    createdAt
-    updatedAt
+  getCourses(limit: 10, offset: 5) {
+    totalCount
+    courses {
+      id
+      name
+      code
+      credits
+      institute_id
+    }
   }
 }
 ```
@@ -254,11 +239,12 @@ query {
 ```
 
 ### **Top Courses Taken by uUsers Per Year**
-
+`Note: The limit here refers to the maximum rank, not the number of results. For example, if limit = 3, it will return all courses ranked 1st, 2nd, or 3rd per year. If multiple courses have the same student_count, they will share the same rank — so the total number of results may exceed the limit due to ties.`
 ```graphql
 query {
-  getTopCoursesPerYear(limit: 5) {
+  getTopCoursesPerYear(limit: 3) {
     year
+    rank
     course_name
     course_code
     student_count
@@ -319,14 +305,17 @@ mutation {
 
 ```graphql
 query {
-  getResults {
-    id
-    score
-    grade
-    student_id
-    course_id
-    createdAt
-    updatedAt
+  getResults(limit: 5, offset: 1) {
+    results {
+      id
+      score
+      grade
+      student_id
+      course_id
+      createdAt
+      updatedAt
+    }
+    totalCount
   }
 }
 ```
@@ -347,35 +336,40 @@ query {
 }
 ```
 
-### **Get List of Top Students By Results**
+### **Get List of Top Students by Results**
 
 `Note:If user do not provide courseId or year, the query will return results from all courses and all years.
 If user provide either courseId, year, or both, the results will be filtered accordingly — by the specific course, specific year, or the combination of both.`
 
 ```graphql
 query {
-  getTopStudentsByResults(limit: 1000) {
-    student_id
-    student_name
-    student_email
-    rank
-    highest_score
-    course_name
-    year
+  getTopStudentsByResults(limit: 10, offset: 0) {
+    results {
+      student_id
+      student_name
+      student_email
+      rank
+      highest_score
+      course_name
+      year
+    }
+    totalCount
   }
 }
 ```
-
 ```graphql
 query {
-  getTopStudentsByResults(limit: 1000, courseId: 33, year: 2025) {
-    student_id
-    student_name
-    student_email
-    rank
-    highest_score
-    course_name
-    year
+  getTopStudentsByResults(limit: 10, offset: 0, courseId: 60, year: 2025) {
+    results {
+      student_id
+      student_name
+      student_email
+      rank
+      highest_score
+      course_name
+      year
+    }
+    totalCount
   }
 }
 ```

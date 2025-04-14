@@ -1,13 +1,21 @@
 const Course = require("../../models/Course");
 const sequelize = require("../../config/database");
 
-const getAllCourses = async () => {
+const getAllCourses = async ({ limit = 10, offset = 0 } = {}) => {
   try {
-    return await Course.findAll({
+    const courses = await Course.findAndCountAll({
       where: {
         voided: false,
       },
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
     });
+
+    return {
+      courses: courses.rows,
+      totalCount: courses.count,
+    };
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch courses.");
@@ -98,7 +106,7 @@ const getTopCoursesPerYear = async (limit = 3) => {
           c.name AS course_name,
           c.code AS course_code,
           COUNT(r.id) AS student_count,
-          RANK() OVER (
+          DENSE_RANK() OVER (
             PARTITION BY EXTRACT(YEAR FROM r."createdAt")
             ORDER BY COUNT(r.id) DESC
           ) AS rank

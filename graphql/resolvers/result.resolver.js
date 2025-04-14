@@ -2,9 +2,9 @@ const resultService = require("../services/result.service");
 
 const resultResolvers = {
   Query: {
-    getResults: async () => {
+    getResults: async (args) => {
       try {
-        return await resultService.getAllResults();
+        return await resultService.getAllResults(args);
       } catch (error) {
         console.error(error);
         throw new Error("Failed to fetch results.");
@@ -20,9 +20,9 @@ const resultResolvers = {
       }
     },
 
-    getResultsPerInstitute: async () => {
+    getResultsPerInstitute: async (_, { limit, offset }) => {
       try {
-        return await resultService.getResultsPerInstitute();
+        return await resultService.getResultsPerInstitute(limit, offset);
       } catch (error) {
         console.error(error);
         throw new Error("Failed to fetch results per institute.");

@@ -2,9 +2,9 @@ const courseService = require("../services//course.service");
 
 const courseResolvers = {
   Query: {
-    getCourses: async () => {
+    getCourses: async (_, args) => {
       try {
-        return await courseService.getAllCourses();
+        return await courseService.getAllCourses(args);
       } catch (error) {
         console.error(error);
         throw new Error("Failed to fetch courses.");
