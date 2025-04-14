@@ -17,6 +17,11 @@ const Student = sequelize.define(
     dob: {
       type: DataTypes.DATEONLY,
     },
+    voided: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,

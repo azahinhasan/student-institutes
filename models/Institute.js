@@ -11,6 +11,11 @@ const Institute = sequelize.define(
     address: {
       type: DataTypes.TEXT,
     },
+    voided: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,

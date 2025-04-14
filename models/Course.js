@@ -18,6 +18,11 @@ const Course = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    voided: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,

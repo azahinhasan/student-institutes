@@ -3,7 +3,11 @@ const sequelize = require("../../config/database");
 
 const getAllCourses = async () => {
   try {
-    return await Course.findAll();
+    return await Course.findAll({
+      where: {
+        voided: false,
+      },
+    });
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch courses.");
@@ -12,7 +16,12 @@ const getAllCourses = async () => {
 
 const getCourseById = async (id) => {
   try {
-    return await Course.findByPk(id);
+    return await Course.findOne({
+      where: {
+        id,
+        voided: false,
+      },
+    });
   } catch (error) {
     console.error(error);
     throw new Error("Course not found.");
@@ -31,15 +40,23 @@ const createCourse = async (name, code, credits, institute_id) => {
 
 const updateCourse = async (id, name, code, credits, institute_id) => {
   try {
-    const course = await Course.findByPk(id);
+    const course = await Course.findOne({
+      where: {
+        id,
+        voided: false,
+      },
+    });
+
     if (!course) {
       throw new Error("Course not found.");
     }
+
     course.name = name || course.name;
     course.code = code || course.code;
     course.credits = credits || course.credits;
     course.institute_id = institute_id || course.institute_id;
     await course.save();
+
     return course;
   } catch (error) {
     console.error(error);
@@ -49,12 +66,21 @@ const updateCourse = async (id, name, code, credits, institute_id) => {
 
 const deleteCourse = async (id) => {
   try {
-    const course = await Course.findByPk(id);
+    const course = await Course.findOne({
+      where: {
+        id,
+        voided: false,
+      },
+    });
+
     if (!course) {
-      throw new Error("Course not found.");
+      throw new Error("Course not found or already deleted.");
     }
-    await course.destroy();
-    return `Course with ID ${id} deleted successfully.`;
+
+    course.voided = true;
+    await course.save();
+
+    return `Course with ID ${id} marked as voided.`;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to delete course.");
@@ -78,6 +104,7 @@ const getTopCoursesPerYear = async (limit = 3) => {
           ) AS rank
         FROM "Results" r
         JOIN "Courses" c ON r.course_id = c.id
+        WHERE c.voided = FALSE
         GROUP BY year, c.id
       ) AS ranked
       WHERE rank <= :limit

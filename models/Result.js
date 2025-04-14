@@ -16,6 +16,11 @@ const Result = sequelize.define(
     grade: {
       type: DataTypes.STRING(2),
     },
+    voided: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,

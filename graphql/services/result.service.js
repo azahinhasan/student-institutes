@@ -5,7 +5,9 @@ const Course = require("../../models/Course");
 
 const getAllResults = async () => {
   try {
-    return await Result.findAll();
+    return await Result.findAll({
+      where: { voided: false },
+    });
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch results.");
@@ -14,7 +16,9 @@ const getAllResults = async () => {
 
 const getResultById = async (id) => {
   try {
-    return await Result.findByPk(id);
+    return await Result.findOne({
+      where: { id, voided: false },
+    });
   } catch (error) {
     console.error(error);
     throw new Error("Result not found.");
@@ -28,8 +32,6 @@ const createResult = async (score, grade, student_id, course_id) => {
       grade,
       student_id,
       course_id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     return result;
   } catch (error) {
@@ -40,14 +42,18 @@ const createResult = async (score, grade, student_id, course_id) => {
 
 const updateResult = async (id, score, grade) => {
   try {
-    const result = await Result.findByPk(id);
+    const result = await Result.findOne({
+      where: { id, voided: false },
+    });
+
     if (!result) {
       throw new Error("Result not found.");
     }
-    result.score = score || result.score;
-    result.grade = grade || result.grade;
-    result.updatedAt = new Date();
+
+    result.score = score ?? result.score;
+    result.grade = grade ?? result.grade;
     await result.save();
+
     return result;
   } catch (error) {
     console.error(error);
@@ -57,12 +63,18 @@ const updateResult = async (id, score, grade) => {
 
 const deleteResult = async (id) => {
   try {
-    const result = await Result.findByPk(id);
+    const result = await Result.findOne({
+      where: { id, voided: false },
+    });
+
     if (!result) {
       throw new Error("Result not found.");
     }
-    await result.destroy();
-    return `Result with ID ${id} deleted successfully.`;
+
+    result.voided = true;
+    await result.save();
+
+    return `Result with ID ${id} marked as voided.`;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to delete result.");
@@ -72,21 +84,31 @@ const deleteResult = async (id) => {
 const getResultsPerInstitute = async () => {
   try {
     const results = await Institute.findAll({
+      where: { voided: false },
       include: {
         model: Student,
         as: "students",
+        where: { voided: false },
+        required: false,
         include: [
           {
             model: Result,
             as: "results",
+            where: { voided: false },
+            required: false,
+            include: [
+              {
+                model: Course,
+                as: "course",
+                where: { voided: false },
+                required: false,
+              },
+            ],
           },
         ],
       },
     });
 
-    if (!results || results.length === 0) {
-      return [];
-    }
     return results;
   } catch (error) {
     console.error(error);

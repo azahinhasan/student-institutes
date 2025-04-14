@@ -3,7 +3,7 @@ const sequelize = require("../../config/database");
 
 const getAllStudents = async () => {
   try {
-    return await Student.findAll();
+    return await Student.findAll({ where: { voided: false } });
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch students.");
@@ -12,7 +12,7 @@ const getAllStudents = async () => {
 
 const getStudentById = async (id) => {
   try {
-    return await Student.findByPk(id);
+    return await Student.findOne({ where: { id, voided: false } });
   } catch (error) {
     console.error(error);
     throw new Error("Student not found.");
@@ -31,7 +31,7 @@ const createStudent = async ({ name, email, dob, institute_id }) => {
 
 const updateStudent = async (id, { name, email, dob, institute_id }) => {
   try {
-    const student = await Student.findByPk(id);
+    const student = await Student.findOne({ where: { id, voided: false } });
     if (!student) {
       throw new Error("Student not found.");
     }
@@ -51,12 +51,15 @@ const updateStudent = async (id, { name, email, dob, institute_id }) => {
 
 const deleteStudent = async (id) => {
   try {
-    const student = await Student.findByPk(id);
+    const student = await Student.findOne({ where: { id, voided: false } });
     if (!student) {
       throw new Error("Student not found.");
     }
-    await student.destroy();
-    return `Student with ID ${id} deleted successfully.`;
+
+    student.voided = true;
+    await student.save();
+
+    return `Student with ID ${id} marked as voided.`;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to delete student.");
@@ -89,9 +92,9 @@ const getTopStudentsByResults = async (
             ORDER BY MAX(r.score) DESC
           ) AS rank
         FROM "Results" r
-        JOIN "Students" s ON r.student_id = s.id
-        ${courseId ? `JOIN "Courses" c ON r.course_id = c.id` : ""}
-        WHERE 1=1
+        JOIN "Students" s ON r.student_id = s.id AND s.voided = false
+        JOIN "Courses" c ON r.course_id = c.id AND c.voided = false
+        WHERE r.voided = false
         ${courseId ? `AND r.course_id = :courseId` : ""}
         ${year ? `AND EXTRACT(YEAR FROM r."createdAt") = :year` : ""}
         GROUP BY r.student_id, r.course_id, EXTRACT(YEAR FROM r."createdAt")
@@ -99,7 +102,7 @@ const getTopStudentsByResults = async (
       JOIN "Students" s ON ranked.student_id = s.id
       JOIN "Courses" c ON ranked.course_id = c.id
       ORDER BY ranked.rank
-      LIMIT ${limit};
+      LIMIT :limit;
       `,
       {
         replacements: { limit, courseId, year },
