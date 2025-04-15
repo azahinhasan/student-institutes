@@ -3,12 +3,13 @@ const { faker } = require("@faker-js/faker");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const institutes = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 100000; i++) {
       institutes.push({
         name: faker.company.name(),
-        address: faker.address.streetAddress(),
+        address: faker.location.streetAddress(),
         createdAt: new Date(),
         updatedAt: new Date(),
+        voided: institutes.length % 2 === 0,
       });
     }
     await queryInterface.bulkInsert("Institutes", institutes);

@@ -29,6 +29,7 @@ module.exports = {
         grade: faker.helpers.arrayElement(["A", "B", "C", "D", "F"]),
         createdAt: new Date(),
         updatedAt: new Date(),
+        voided: results.length % 2 === 0,
       });
     }
 

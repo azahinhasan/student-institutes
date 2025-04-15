@@ -1,6 +1,7 @@
 # Application Documentation
 
-This application is built using Express.js, GraphQL, PostgreSQL, JWT authentication, Sequelize ORM, and other technologies.
+This application is built with Express.js, GraphQL, PostgreSQL, JWT authentication, and Sequelize ORM. It supports modular CRUD operations, pagination, performance indexing, and authentication.
+
 
 # Getting Started
 
@@ -479,22 +480,21 @@ mutation {
 
 ### Some test after and before indexing
 
-```
+```sql
 --Get results by student id--
-select * from "Results" r  where student_id=55;
-Execution Time 
-- Execution Time (Before): 1.496 ms
-- Execution Time (After): 0.048 ms
-- Dataset: 0.1 million results
+SELECT * FROM "Results" r  WHERE student_id = 55;
+-- Execution Time (Before): 1.496 ms
+-- Execution Time (After): 0.048 ms
+-- Dataset: 0.1 million results
 ```
-```
+```sql
 --Get count total student by voided--
 SELECT COUNT(*) FROM "Students" WHERE voided = false;
-- Execution Time (Before): 0.212 ms
-- Execution Time (After): 0.139 ms
-- Dataset: 0.1 million students
+-- Execution Time (Before): 0.212 ms
+-- Execution Time (After): 0.139 ms
+-- Dataset: 0.1 million students
 ```
-```
+```sql
 --Get all top students by results--
 SELECT
   ranked.student_id,
@@ -524,16 +524,15 @@ FROM (
 JOIN "Students" s ON ranked.student_id = s.id
 JOIN "Courses" c ON ranked.course_id = c.id
 ORDER BY ranked.rank;
-
-- Execution Time (Before): 1.847 ms
-- Execution Time (After): 0.081 ms
-- Dataset: Each 0.1 million students, results, and courses
+-- Execution Time (Before): 1.847 ms
+-- Execution Time (After): 0.081 ms
+-- Dataset: Each 0.1 million students, results, and courses
 ```
 
-```
+```sql
 --Get students by institute id--
 select * from "Students" s where institute_id = 29;
-- Execution Time (Before): 0.137 ms
-- Execution Time (After): 0.023 ms
-- Dataset: 0.1 million student records
+-- Execution Time (Before): 0.137 ms
+-- Execution Time (After): 0.023 ms
+-- Dataset: 0.1 million student records
 ```

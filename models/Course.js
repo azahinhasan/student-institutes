@@ -26,6 +26,14 @@ const Course = sequelize.define(
   },
   {
     timestamps: true,
+    indexes: [
+      {
+        fields: ["voided"],
+      },
+      {
+        fields: ["code"],
+      },
+    ],
   }
 );
 

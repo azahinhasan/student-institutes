@@ -25,6 +25,14 @@ const Student = sequelize.define(
   },
   {
     timestamps: true,
+    indexes: [
+      {
+        fields: ["voided"],
+      },
+      {
+        fields: ["email", "name"],
+      },
+    ],
   }
 );
 

@@ -19,6 +19,14 @@ const Institute = sequelize.define(
   },
   {
     timestamps: true,
+    indexes: [
+      {
+        fields: ["voided"],
+      },
+      {
+        fields: ["name"],
+      },
+    ],
   }
 );
 

@@ -10,7 +10,7 @@ module.exports = {
     );
 
     let i = 0;
-    while (i < 156) {
+    while (i < 100000) {
       let code = faker.string.alphanumeric(10).toUpperCase();
       if (usedCodes.has(code)) continue;
       usedCodes.add(code);
@@ -22,6 +22,7 @@ module.exports = {
           institutes[Math.floor(Math.random() * (institutes.length - 1))].id,
         createdAt: new Date(),
         updatedAt: new Date(),
+        voided: i % 2 === 0,
       });
       i++;
     }

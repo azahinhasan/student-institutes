@@ -14,6 +14,9 @@ const typeDefs = gql`
     token: String!
     user: User!
   }
+  type AuthPayloadSignUp {
+    user: User!
+  }
 
   # Institute schema
   type Institute {
@@ -143,7 +146,7 @@ const typeDefs = gql`
       email: String!
       password: String!
       role: String
-    ): AuthPayload!
+    ): AuthPayloadSignUp!
 
     signIn(email: String!, password: String!): AuthPayload!
 

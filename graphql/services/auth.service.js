@@ -17,16 +17,7 @@ const signUp = async (name, email, password, role) => {
     role: role,
   });
 
-  const token = jwt.sign(
-    { id: user.id, role: user.role },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "7d",
-    }
-  );
-
   return {
-    token,
     user,
   };
 };

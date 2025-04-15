@@ -26,8 +26,10 @@ const Result = sequelize.define(
     timestamps: true,
     indexes: [
       {
-        unique: true,
         fields: ["student_id", "course_id"],
+      },
+      {
+        fields: ["voided"],
       },
     ],
   }
