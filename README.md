@@ -55,9 +55,10 @@ Application should now be up and running at `http://localhost:5050/graphql`
 ## Auth Mutations
 
 ### **Sign-In Mutation**
-`Note: The initial user (admin@test.com) is created during the database seeding process. This is the only publicly accessible mutation. Upon successful login, the JWT token is automatically stored in cookies and used for subsequent API requests.`
+`Note:` <br/>
+`- The initial user (admin@test.com) is created during the database seeding process. This is the only publicly accessible mutation. Upon successful login, the JWT token is automatically stored in cookies and used for subsequent API requests.`
 <br/>
-`Alternatively, you can manually pass the token in the request header using -
+`- Alternatively, you can manually pass the token in the request header using -
 Authorization: Bearer <token> `
 <br/>
 `Both methods are supported.`
@@ -297,7 +298,9 @@ query {
 ```
 
 ### **Top Courses Taken by uUsers Per Year**
-`Note: The limit here refers to the maximum rank, not the number of results. For example, if limit = 3, it will return all courses ranked 1st, 2nd, or 3rd per year. If multiple courses have the same student_count, they will share the same rank — so the total number of results may exceed the limit due to ties.`
+`Note: The limit here refers to the maximum rank, not the number of results.` 
+<br/>
+`- For example, if limit = 3, it will return all courses ranked 1st, 2nd, or 3rd per year. If multiple courses have the same student_count, they will share the same rank — so the total number of results may exceed the limit due to ties.`
 ```graphql
 query {
   getTopCoursesPerYear(limit: 3) {
@@ -471,30 +474,30 @@ mutation {
 # Some Other Information
 
 ### Explain the approach to implementing JWT
-- Using JWT which has validity 7 days.
-- Token is sent back to the client via cookie or response.
-- On protected routes, client sends token in Authorization header `Authorization: Bearer <your_token_here>` or cookie.
-- Server generates JWT using user id and role.
+- Using JWT, which has a validity of 7 days.
+- The token is sent back to the client via cookie or response.
+- On protected routes, the client sends a token in the Authorization header `Authorization: Bearer <your_token_here>` or cookie.
+- The server generates JWT using the user ID and role.
 - Middleware extracts and verifies the token using the secret.
 
 ### Some test after and before indexing
 
-```
+```sql
 --Get results by student id--
-select * from "Results" r  where student_id=55;
+SELECT * FROM "Results" r  WHERE student_id=55;
 Execution Time 
-- Execution Time (Before): 1.496 ms
-- Execution Time (After): 0.048 ms
-- Dataset: 0.1 million results
+-- Execution Time (Before): 1.496 ms
+-- Execution Time (After): 0.048 ms
+-- Dataset: 0.1 million results
 ```
-```
+```sql
 --Get count total student by voided--
 SELECT COUNT(*) FROM "Students" WHERE voided = false;
-- Execution Time (Before): 0.212 ms
-- Execution Time (After): 0.139 ms
-- Dataset: 0.1 million students
+-- Execution Time (Before): 0.212 ms
+-- Execution Time (After): 0.139 ms
+-- Dataset: 0.1 million students
 ```
-```
+```sql
 --Get all top students by results--
 SELECT
   ranked.student_id,
@@ -525,15 +528,15 @@ JOIN "Students" s ON ranked.student_id = s.id
 JOIN "Courses" c ON ranked.course_id = c.id
 ORDER BY ranked.rank;
 
-- Execution Time (Before): 1.847 ms
-- Execution Time (After): 0.081 ms
-- Dataset: Each 0.1 million students, results, and courses
+-- Execution Time (Before): 1.847 ms
+-- Execution Time (After): 0.081 ms
+-- Dataset: Each 0.1 million students, results, and courses
 ```
 
-```
+```sql
 --Get students by institute id--
-select * from "Students" s where institute_id = 29;
-- Execution Time (Before): 0.137 ms
-- Execution Time (After): 0.023 ms
-- Dataset: 0.1 million student records
+SELECT * FROM "Students" s WHERE institute_id = 29;
+-- Execution Time (Before): 0.137 ms
+-- Execution Time (After): 0.023 ms
+-- Dataset: 0.1 million student records
 ```
