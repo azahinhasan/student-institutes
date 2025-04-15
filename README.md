@@ -1,7 +1,50 @@
-# Project Documentation
+# Application Documentation
 
+This application is built using Express.js, GraphQL, PostgreSQL, JWT authentication, Sequelize ORM, and other technologies.
+
+# Getting Started
+- Clone this repo
+- Go to the application folder
+- Run `npm i`
+- Setup `.env`
+  - Example:
+  ```
+    DB_PORT=5432
+    DB_NAME=
+    DB_USER=
+    DB_PASS=
+    DB_HOST=
+    JWT_SECRET=supersecretkey
+    APP_PORT=5000
+  ```
+- Now run `npm run sync-db`. This will create DB(if not exist) and table with indexing.
+- Then, run `npm run seed`. This will populate DB with dummy data.
+- Finaly, run `npm run dev`. Will start the app. 
+
+# GraphQL Query Examples
 
 ## Auth Mutations
+
+### **Sign-In Mutation**
+`Note: The initial user (admin@test.com) is created during the database seeding process. This is the only publicly accessible mutation. Upon successful login, the JWT token is automatically stored in cookies and used for subsequent API requests.`
+<br/>
+`Alternatively, you can manually pass the token in the request header using -
+Authorization: Bearer <token> `
+<br/>
+`Both methods are supported.`
+
+```graphql
+mutation {
+  signIn(email: "admin@test.com", password: "admin123") {
+    token
+    user {
+      id
+      name
+      email
+    }
+  }
+}
+```
 
 ### **Sign-Up Mutation**
 
@@ -23,20 +66,7 @@ mutation {
 }
 ```
 
-### **Sign-In Mutation**
 
-```graphql
-mutation {
-  signIn(email: "zahin@example.com", password: "password123") {
-    token
-    user {
-      id
-      name
-      email
-    }
-  }
-}
-```
 
 ## Institute Queries and Mutations
 
@@ -410,10 +440,3 @@ mutation {
 }
 ```
 
-# Using Postman for GraphQL Testing
-
-- **Set up your request** with the URL, method (`POST`), headers, and body (the GraphQL query/mutation).
-- **Click Send** and check the response in the **Body** section of Postman.
-- For mutations like `updateUser` or `deleteUser`, you will need to send the JWT token in the `Authorization` header as a Bearer token (e.g., `Authorization: Bearer <your_token_here>`).
-
-By following these steps, you can easily test your GraphQL API for user authentication and management directly in Postman!
