@@ -291,8 +291,6 @@ query {
     code
     credits
     institute_id
-    createdAt
-    updatedAt
   }
 }
 ```
@@ -373,8 +371,6 @@ query {
       grade
       student_id
       course_id
-      createdAt
-      updatedAt
     }
     totalCount
   }
@@ -391,8 +387,6 @@ query {
     grade
     student_id
     course_id
-    createdAt
-    updatedAt
   }
 }
 ```
