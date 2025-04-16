@@ -3,7 +3,7 @@ const { faker } = require("@faker-js/faker");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const institutes = [];
-    for (let i = 0; i < 100000; i++) {
+    for (let i = 0; i < 10; i++) {
       institutes.push({
         name: faker.company.name(),
         address: faker.location.streetAddress(),

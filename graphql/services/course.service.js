@@ -1,7 +1,7 @@
 const Course = require("../../models/Course");
 const sequelize = require("../../config/database");
 
-const getAllCourses = async ({ limit = 10, offset = 0 } = {}) => {
+const getAllCourses = async (limit = 10, offset = 0) => {
   try {
     const courses = await Course.findAndCountAll({
       where: {
@@ -18,21 +18,27 @@ const getAllCourses = async ({ limit = 10, offset = 0 } = {}) => {
     };
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to fetch courses.");
+    throw new Error(error.message || "Failed to fetch courses.");
   }
 };
 
 const getCourseById = async (id) => {
   try {
-    return await Course.findOne({
+    const course = await Course.findOne({
       where: {
         id,
         voided: false,
       },
     });
+
+    if (!course) {
+      throw new Error("Course not found.");
+    }
+
+    return course;
   } catch (error) {
     console.error(error);
-    throw new Error("Course not found.");
+    throw new Error(error.message || "Failed to fetch course.");
   }
 };
 
@@ -42,7 +48,7 @@ const createCourse = async (name, code, credits, institute_id) => {
     return course;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to create course.");
+    throw new Error(error.message || "Failed to create course.");
   }
 };
 
@@ -68,7 +74,7 @@ const updateCourse = async (id, name, code, credits, institute_id) => {
     return course;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to update course.");
+    throw new Error(error.message || "Failed to update course.");
   }
 };
 
@@ -91,7 +97,7 @@ const deleteCourse = async (id) => {
     return `Course with ID ${id} marked as voided.`;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to delete course.");
+    throw new Error(error.message || "Failed to delete course.");
   }
 };
 
@@ -126,7 +132,7 @@ const getTopCoursesPerYear = async (limit = 3) => {
     return results;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to fetch top courses per year.");
+    throw new Error(error.message || "Failed to fetch top courses per year.");
   }
 };
 

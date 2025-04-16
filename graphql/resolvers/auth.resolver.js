@@ -7,7 +7,7 @@ const authResolvers = {
         return await authService.getUsers();
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch users.");
+        throw new Error(error.message || "Failed to fetch users.");
       }
     },
   },
@@ -18,9 +18,7 @@ const authResolvers = {
         return await authService.signUp(name, email, password, role);
       } catch (error) {
         console.error(error);
-        throw new Error(
-          error.toString().split(":")[1] || "Failed to sign up user."
-        );
+        throw new Error(error.message || "Failed to sign up user.");
       }
     },
 
@@ -37,7 +35,7 @@ const authResolvers = {
         return { token, user };
       } catch (error) {
         console.error(error);
-        throw new Error(error.toString().split(":")[1] || "Failed to sign in.");
+        throw new Error(error.message || "Failed to sign in.");
       }
     },
 
@@ -46,7 +44,7 @@ const authResolvers = {
         return await authService.updateUser(id, name, email, role, isActive);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to update user.");
+        throw new Error(error.message || "Failed to update user.");
       }
     },
 
@@ -55,7 +53,7 @@ const authResolvers = {
         return await authService.deleteUser(id);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to delete user.");
+        throw new Error(error.message || "Failed to delete user.");
       }
     },
   },

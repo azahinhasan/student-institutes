@@ -2,21 +2,21 @@ const studentService = require("../services/student.service");
 
 const studentResolvers = {
   Query: {
-    getAllStudents: async (args) => {
+    getAllStudents: async ({ limit, offset }) => {
       try {
-        return await studentService.getAllStudents(args);
+        return await studentService.getAllStudents(limit, offset);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch students.");
+        throw new Error(error.message || "Failed to fetch students.");
       }
     },
 
-    getStudent: async (_, { id }) => {
+    getStudentById: async (_, { id }) => {
       try {
         return await studentService.getStudentById(id);
       } catch (error) {
         console.error(error);
-        throw new Error("Student not found.");
+        throw new Error(error.message);
       }
     },
 
@@ -30,7 +30,9 @@ const studentResolvers = {
         );
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch top students by results.");
+        throw new Error(
+          error.message || "Failed to fetch top students by results."
+        );
       }
     },
   },
@@ -46,7 +48,7 @@ const studentResolvers = {
         });
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to create student.");
+        throw new Error(error.message || "Failed to create student.");
       }
     },
 
@@ -60,7 +62,7 @@ const studentResolvers = {
         });
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to update student.");
+        throw new Error(error.message || "Failed to update student.");
       }
     },
 
@@ -70,7 +72,7 @@ const studentResolvers = {
         return message;
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to delete student.");
+        throw new Error(error.message || "Failed to delete student.");
       }
     },
   },

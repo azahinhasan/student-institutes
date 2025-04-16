@@ -2,29 +2,31 @@ const courseService = require("../services//course.service");
 
 const courseResolvers = {
   Query: {
-    getCourses: async (_, args) => {
+    getCourses: async (_, { limit, offset }) => {
       try {
-        return await courseService.getAllCourses(args);
+        return await courseService.getAllCourses(limit, offset);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch courses.");
+        throw new Error(error.message || "Failed to fetch courses.");
       }
     },
 
-    getCourse: async (_, { id }) => {
+    getCourseById: async (_, { id }) => {
       try {
         return await courseService.getCourseById(id);
       } catch (error) {
         console.error(error);
-        throw new Error("Course not found.");
+        throw new Error(error.message || "Course not found.");
       }
     },
     getTopCoursesPerYear: async (_, { limit }) => {
       try {
-        return await courseService.getTopCoursesPerYear(limit || 3);
+        return await courseService.getTopCoursesPerYear(limit);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch top courses per year.");
+        throw new Error(
+          error.message || "Failed to fetch top courses per year."
+        );
       }
     },
   },
@@ -40,7 +42,7 @@ const courseResolvers = {
         );
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to create course.");
+        throw new Error(error.message || "Failed to create course.");
       }
     },
 
@@ -55,7 +57,7 @@ const courseResolvers = {
         );
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to update course.");
+        throw new Error(error.message || "Failed to update course.");
       }
     },
 
@@ -64,7 +66,7 @@ const courseResolvers = {
         return await courseService.deleteCourse(id);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to delete course.");
+        throw new Error(error.message || "Failed to delete course.");
       }
     },
   },

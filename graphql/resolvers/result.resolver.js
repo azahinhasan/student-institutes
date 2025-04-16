@@ -2,12 +2,12 @@ const resultService = require("../services/result.service");
 
 const resultResolvers = {
   Query: {
-    getResults: async (args) => {
+    getResults: async (_, { limit, offset }) => {
       try {
-        return await resultService.getAllResults(args);
+        return await resultService.getAllResults(limit, offset);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch results.");
+        throw new Error(error.message || "Failed to fetch results.");
       }
     },
 
@@ -16,7 +16,7 @@ const resultResolvers = {
         return await resultService.getResultById(id);
       } catch (error) {
         console.error(error);
-        throw new Error("Result not found.");
+        throw new Error(error.message || "Result not found.");
       }
     },
 
@@ -25,7 +25,9 @@ const resultResolvers = {
         return await resultService.getResultsPerInstitute(limit, offset);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch results per institute.");
+        throw new Error(
+          error.message || "Failed to fetch results per institute."
+        );
       }
     },
   },
@@ -41,7 +43,7 @@ const resultResolvers = {
         );
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to create result.");
+        throw new Error(error.message || "Failed to create result.");
       }
     },
 
@@ -50,7 +52,7 @@ const resultResolvers = {
         return await resultService.updateResult(id, score, grade);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to update result.");
+        throw new Error(error.message || "Failed to update result.");
       }
     },
 
@@ -59,7 +61,7 @@ const resultResolvers = {
         return await resultService.deleteResult(id);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to delete result.");
+        throw new Error(error.message || "Failed to delete result.");
       }
     },
   },

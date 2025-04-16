@@ -32,7 +32,7 @@ This application is built using Express.js, GraphQL, PostgreSQL, JWT authenticat
    ```
 
 5. **Initialize the Database**
-   Run the following command to create the database (if it doesn't exist), and set up tables with indexing:
+   Run the following command for first time to create the database (if it doesn't exist), and set up tables with indexing:
    ```bash
    npm run sync-db
    ```
@@ -139,7 +139,7 @@ mutation {
 
 ```graphql
 mutation {
-  updateInstitute(id: 1, name: "Updated Institute", address: "456 New St") {
+  updateInstitute(id: 2, name: "Updated Institute", address: "456 New St") {
     id
     name
     address
@@ -176,7 +176,7 @@ query {
 
 ```graphql
 query {
-  getStudent(id: 1) {
+  getStudentById(id: 1) {
     id
     name
     email
@@ -285,7 +285,7 @@ query {
 
 ```graphql
 query {
-  getCourse(id: 1) {
+  getCourseById(id: 1) {
     id
     name
     code

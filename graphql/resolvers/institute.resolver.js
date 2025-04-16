@@ -7,7 +7,7 @@ const instituteResolvers = {
         return await instituteService.getAllInstitutes();
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch institutes.");
+        throw new Error(error.message);
       }
     },
 
@@ -16,7 +16,7 @@ const instituteResolvers = {
         return await instituteService.getInstituteById(id);
       } catch (error) {
         console.error(error);
-        throw new Error("Institute not found.");
+        throw new Error(error.message);
       }
     },
   },
@@ -27,7 +27,7 @@ const instituteResolvers = {
         return await instituteService.createInstitute(name, address);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to create institute.");
+        throw new Error(error.message);
       }
     },
 
@@ -36,7 +36,7 @@ const instituteResolvers = {
         return await instituteService.updateInstitute(id, name, address);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to update institute.");
+        throw new Error(error.message);
       }
     },
 
@@ -45,7 +45,7 @@ const instituteResolvers = {
         return await instituteService.deleteInstitute(id);
       } catch (error) {
         console.error(error);
-        throw new Error("Failed to delete institute.");
+        throw new Error(error.message);
       }
     },
   },

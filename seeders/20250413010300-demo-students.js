@@ -9,8 +9,7 @@ module.exports = {
       'SELECT id FROM "Institutes"'
     );
 
-    let totalStudents = 0;
-    while (totalStudents < 100000) {
+    while (students.length < 100000) {
       const email = faker.internet.email().toLowerCase();
       if (usedEmails.has(email)) continue;
 
@@ -24,9 +23,8 @@ module.exports = {
           institutes[Math.floor(Math.random() * (institutes.length - 1))].id,
         createdAt: new Date(),
         updatedAt: new Date(),
-        voided: totalStudents % 2 === 0,
+        voided: students.length % 2 === 0,
       });
-      totalStudents++;
     }
 
     await queryInterface.bulkInsert("Students", students);

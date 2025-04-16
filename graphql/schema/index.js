@@ -1,7 +1,11 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
-  # User schema
+  ######################
+  #        TYPES       #
+  ######################
+
+  # User information including role and account status
   type User {
     id: ID!
     name: String!
@@ -10,15 +14,18 @@ const typeDefs = gql`
     isActive: Boolean!
   }
 
+  # Payload returned after successful sign-in
   type AuthPayload {
     token: String!
     user: User!
   }
+
+  # Payload returned after successful sign-up
   type AuthPayloadSignUp {
     user: User!
   }
 
-  # Institute schema
+  # Institute details
   type Institute {
     id: ID!
     name: String!
@@ -28,13 +35,13 @@ const typeDefs = gql`
     students: [Student!]!
   }
 
-  # Institute paginated results schema
+  # Paginated response for institutes
   type InstituteResultsPagination {
     institutes: [Institute!]!
     totalCount: Int!
   }
 
-  # Course schema
+  # Course details
   type Course {
     id: ID!
     name: String!
@@ -43,12 +50,13 @@ const typeDefs = gql`
     institute_id: Int!
   }
 
+  # Paginated response for courses
   type CoursePagination {
     courses: [Course!]!
     totalCount: Int!
   }
 
-  # TopStudent schema
+  # Aggregated result of top-performing students by course/year
   type TopStudent {
     student_id: Int
     student_name: String
@@ -59,13 +67,13 @@ const typeDefs = gql`
     year: Int!
   }
 
-  # TopStudent pagination
+  # Paginated response for top students
   type TopStudentPagination {
     results: [TopStudent!]!
     totalCount: Int!
   }
 
-  # TopCourse schema
+  # Aggregated top courses per year
   type TopCourse {
     year: Int
     course_name: String
@@ -74,7 +82,7 @@ const typeDefs = gql`
     student_count: Int
   }
 
-  # Result schema
+  # Result of a student in a course
   type Result {
     id: ID!
     score: Float!
@@ -85,13 +93,13 @@ const typeDefs = gql`
     updatedAt: String!
   }
 
-  # Result Pagination schema
+  # Paginated response for results
   type ResultPagination {
     results: [Result!]!
     totalCount: Int!
   }
 
-  # Student schema
+  # Student information
   type Student {
     id: ID!
     name: String!
@@ -103,21 +111,27 @@ const typeDefs = gql`
     results: [Result!]!
   }
 
+  # Paginated response for students
   type StudentPagination {
     students: [Student!]!
     totalCount: Int!
   }
 
-  # Queries
+  ######################
+  #      QUERIES       #
+  ######################
+
   type Query {
-    # User queries
+    # Fetch all users
     getUsers: [User!]!
+
+    # Institute queries
     getAllInstitutes: [Institute!]!
     getInstitute(id: ID!): Institute
 
     # Course queries
     getCourses(limit: Int, offset: Int): CoursePagination!
-    getCourse(id: ID!): Course
+    getCourseById(id: ID!): Course
     getTopCoursesPerYear(limit: Int): [TopCourse]
 
     # Result queries
@@ -125,7 +139,7 @@ const typeDefs = gql`
     getResult(id: ID!): Result
     getResultsPerInstitute(limit: Int, offset: Int): InstituteResultsPagination!
 
-    # Updated TopStudents query with pagination
+    # Top-performing students query (with pagination)
     getTopStudentsByResults(
       limit: Int
       offset: Int
@@ -135,12 +149,15 @@ const typeDefs = gql`
 
     # Student queries
     getAllStudents(limit: Int, offset: Int): StudentPagination!
-    getStudent(id: ID!): Student
+    getStudentById(id: ID!): Student
   }
 
-  # Mutations
+  ######################
+  #     MUTATIONS      #
+  ######################
+
   type Mutation {
-    # User mutations
+    # User registration
     signUp(
       name: String!
       email: String!
@@ -148,8 +165,10 @@ const typeDefs = gql`
       role: String
     ): AuthPayloadSignUp!
 
+    # User login
     signIn(email: String!, password: String!): AuthPayload!
 
+    # Update existing user
     updateUser(
       id: ID!
       name: String
@@ -158,20 +177,27 @@ const typeDefs = gql`
       isActive: Boolean
     ): User!
 
+    # Delete a user by ID
     deleteUser(id: ID!): String!
 
-    # Institute mutations
+    # Create a new institute
     createInstitute(name: String!, address: String): Institute!
+
+    # Update an existing institute
     updateInstitute(id: ID!, name: String, address: String): Institute!
+
+    # Delete an institute by ID
     deleteInstitute(id: ID!): String!
 
-    # Course mutations
+    # Create a new course
     createCourse(
       name: String!
       code: String!
       credits: Int!
       institute_id: Int!
     ): Course
+
+    # Update existing course details
     updateCourse(
       id: ID!
       name: String
@@ -179,25 +205,33 @@ const typeDefs = gql`
       credits: Int
       institute_id: Int
     ): Course
+
+    # Delete a course by ID
     deleteCourse(id: ID!): String
 
-    # Result mutations
+    # Create a result record
     createResult(
       score: Float!
       grade: String!
       student_id: Int!
       course_id: Int!
     ): Result
+
+    # Update a result record
     updateResult(id: ID!, score: Float, grade: String): Result
+
+    # Delete a result by ID
     deleteResult(id: ID!): String
 
-    # Student mutations
+    # Register a new student
     createStudent(
       name: String!
       email: String!
       dob: String
       institute_id: ID!
     ): Student
+
+    # Update student information
     updateStudent(
       id: ID!
       name: String
@@ -205,6 +239,8 @@ const typeDefs = gql`
       dob: String
       institute_id: ID
     ): Student
+
+    # Delete a student by ID
     deleteStudent(id: ID!): String
   }
 `;

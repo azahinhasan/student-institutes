@@ -1,7 +1,7 @@
 const Student = require("../../models/Student");
 const sequelize = require("../../config/database");
 
-const getAllStudents = async ({ limit = 10, offset = 0 } = {}) => {
+const getAllStudents = async (limit = 10, offset = 0) => {
   try {
     const students = await Student.findAll({
       where: { voided: false },
@@ -21,10 +21,14 @@ const getAllStudents = async ({ limit = 10, offset = 0 } = {}) => {
 
 const getStudentById = async (id) => {
   try {
-    return await Student.findOne({ where: { id, voided: false } });
+    const student = await Student.findOne({ where: { id, voided: false } });
+    if (!student) {
+      throw new Error("Student not found.");
+    }
+    return student;
   } catch (error) {
     console.error(error);
-    throw new Error("Student not found.");
+    throw new Error(error.message || "Failed to fetch student.");
   }
 };
 
@@ -34,7 +38,7 @@ const createStudent = async ({ name, email, dob, institute_id }) => {
     return student;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to create student.");
+    throw new Error(error.message || "Failed to create student.");
   }
 };
 
@@ -54,7 +58,7 @@ const updateStudent = async (id, { name, email, dob, institute_id }) => {
     return student;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to update student.");
+    throw new Error(error.message || "Failed to update student.");
   }
 };
 
@@ -71,7 +75,7 @@ const deleteStudent = async (id) => {
     return `Student with ID ${id} marked as voided.`;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to delete student.");
+    throw new Error(error.message || "Failed to delete student.");
   }
 };
 
@@ -155,7 +159,9 @@ const getTopStudentsByResults = async (
     };
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to fetch top students by results.");
+    throw new Error(
+      error.message || "Failed to fetch top students by results."
+    );
   }
 };
 

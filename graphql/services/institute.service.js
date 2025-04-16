@@ -9,7 +9,7 @@ const getAllInstitutes = async () => {
     });
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to fetch institutes.");
+    throw new Error(error.message);
   }
 };
 
@@ -23,7 +23,7 @@ const getInstituteById = async (id) => {
     });
   } catch (error) {
     console.error(error);
-    throw new Error("Institute not found.");
+    throw new Error(error.message);
   }
 };
 
@@ -33,7 +33,7 @@ const createInstitute = async (name, address) => {
     return institute;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to create institute.");
+    throw new Error(error.message);
   }
 };
 
@@ -56,7 +56,7 @@ const updateInstitute = async (id, name, address) => {
     return institute;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to update institute.");
+    throw new Error(error.message);
   }
 };
 
@@ -79,7 +79,7 @@ const deleteInstitute = async (id) => {
     return `Institute with ID ${id} marked as voided.`;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to delete institute.");
+    throw new Error(error.message);
   }
 };
 
